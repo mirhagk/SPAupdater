@@ -1,8 +1,15 @@
 <html>
     <head>
         <script type="text/x-template" id="navBarTemplate">
+            <ul>
             {{~it.inboxes:value:index}}
-            <div>{{=value}}!</div>
+                <li>{{=value}}!</li>
+            {{~}}
+            </ul>
+        </script>
+        <script type="text/x-template" id="mailListTemplate">
+            {{~it:value:index}}
+                <div>{{=value.subject}}</div>
             {{~}}
         </script>
         <script type="text/javascript" src="scripts/lib/doT.js"></script>
@@ -10,6 +17,9 @@
     </head>
     <body onload="Start();">
         <div id="navBar">
+
+        </div>
+        <div id="mailList">
 
         </div>
     </body>
