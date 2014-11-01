@@ -1,3 +1,4 @@
+declare var io: any;
 enum ComponentType{
 		View, Utility, Controller
 }
@@ -16,26 +17,20 @@ class Component{
 class Updater{
     adapter: IAdapter;
 	
-	socket: WebSocket;
-	serverUrl = "http://spaupdater.azurewebsites.net/SocketListen";
+	socket;
+    serverUrl = "http://localhost:1337/";
 	protocolVersion = "watchUpdate:0.1";
-	RegisterWebSocket():void{
-		this.socket = new WebSocket(this.serverUrl,this.protocolVersion);
-		this.socket.onmessage =(event)=>{
-			this.OnServerResponse(JSON.parse(event.data));
-		}
-	}
-	OnServerResponse(serverResponse: ServerResponse){
-		switch (serverResponse.type){
-			case "UpdateComponent":
-				if (this.pendingFullPageUpdate)
-					this.UpdatePage();
-				else
-					this.UpdateComponent(<Component>serverResponse.data);
-				break;
-			case "UpdatePage":
-				break;
-		}
+    RegisterWebSocket(): void{
+        this.socket = new io(this.serverUrl);
+        this.socket.on('update component', (event) => {
+            if (this.pendingFullPageUpdate)
+                this.UpdatePage();
+            else
+                this.UpdateComponent(<Component>JSON.parse(event.data));
+        });
+        this.socket.on('update page', (event) => {
+            this.UpdatePage();
+        });
 	}
 	pendingUpdates = 0;
 	pendingFullPageUpdate=false;

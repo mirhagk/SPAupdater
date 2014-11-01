@@ -2,6 +2,8 @@
     ApplyTemplate('navMenu', data);
     ApplyTemplate('header', headers);
     ApplyTemplate('mailList', jsonValues);
+    var updater = new Updater();
+    updater.RegisterWebSocket();
 }
 function ApplyTemplate(id, data) {
     var template = document.getElementById(id + 'Template');
