@@ -184,3 +184,4 @@ FakesAssemblies/
 *.map
 /UpdateServer/UpdateServer/server.js
 /UpdateServer/UpdateServer/.ntvs_analysis.dat
+/Examples/MailApp/MailApp/scripts/spaupdater

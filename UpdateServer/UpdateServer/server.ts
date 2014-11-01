@@ -5,6 +5,20 @@ var jsdiff = require('diff');
 var fs = require('fs');
 var domCompare = require('dom-compare').compare;
 var dom = require('jsdom').jsdom
+var urlParse = require('url').parse;
+
+if (!(<any>String.prototype).startsWith) {
+    Object.defineProperty(String.prototype, 'startsWith', {
+        enumerable: false,
+        configurable: false,
+        writable: false,
+        value: function (searchString, position) {
+            position = position || 0;
+            return this.lastIndexOf(searchString, position) === position;
+        }
+    });
+}
+
 
 var port = 1337
 http.createServer(function (req, res) {
@@ -12,9 +26,30 @@ http.createServer(function (req, res) {
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:44844');
     res.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With, *');
-    if (req.url.trim()=="/") {
-    res.writeHead(200, { 'Content-Type': 'text/plain' });
-    res.end('Hello World\n');
+
+    var parsedUrl = urlParse(req.url, true);
+    var path = parsedUrl.pathname;
+    var query = parsedUrl.query;
+
+    if (path == "/") {
+        res.writeHead(200, { 'Content-Type': 'text/plain' });
+        res.end('Hello World\n');
+    }
+    else if (path == "/api/getchanges") {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        var lastHistoryIndex = -1;
+        if (query.lastCommit != null)
+            for (var i = 0; i < updateHistory.length; i++) {
+                if (updateHistory[i].Commit.toString().startsWith(query.lastCommit)) {
+                    lastHistoryIndex = i;
+                }
+            }
+        var updatesToDo = updateHistory.slice(lastHistoryIndex + 1);
+        res.end(JSON.stringify(updatesToDo));
+    }
+    else {
+        res.writeHead(404, { 'Content-Type': 'text/plain' });
+        res.end("The resource you're looking for is unavailable");
     }
 }).listen(port);
 
@@ -26,7 +61,7 @@ var rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
 });
-loadCommit(null);
+loadCommit('00000');
 
 
 function findAllFunctions(parseTree, parent) {
