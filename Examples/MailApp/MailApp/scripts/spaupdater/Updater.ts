@@ -40,17 +40,16 @@ class Updater{
 		console.log('There are '+this.pendingUpdates+' updates pending. Refresh the page to get latest');
 	}
     UpdateComponent(component: Component): void{
-        var func = new Function(component.code);
 		switch(component.componentType){
 			case ComponentType.View:
 				this.adapter.RefreshModelFromView(component.name);
-				this.adapter.RegisterView(component.name,func);
+                this.adapter.RegisterView(component.name, component.code);
 				break;
 			case ComponentType.Utility:
-				this.adapter.RegisterUtility(component.name,func);
+                this.adapter.RegisterUtility(component.name, component.code);
 				break;
 			case ComponentType.Controller:
-				this.adapter.RegisterController(component.name,func);
+                this.adapter.RegisterController(component.name, component.code);
 				break;
 		}
 	}

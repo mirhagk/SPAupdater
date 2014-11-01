@@ -1,9 +1,12 @@
 ﻿var updater;
 function Start() {
+    RefreshTemplates();
+    updater = new Updater();
+}
+function RefreshTemplates() {
     ApplyTemplate('navMenu', data);
     ApplyTemplate('header', headers);
     ApplyTemplate('mailList', jsonValues);
-    updater = new Updater();
 }
 function ApplyTemplate(id, data) {
     var template = document.getElementById(id + 'Template');
