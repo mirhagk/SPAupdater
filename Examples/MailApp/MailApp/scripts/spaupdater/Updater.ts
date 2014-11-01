@@ -23,9 +23,9 @@ class Updater{
     CheckForUpdate(): void {
         Ajax.Get(this.serverUrl + '/api/getchanges', (res) => {
             console.log(res);
-            if (this.pollingRate)
-                window.setTimeout(()=>this.CheckForUpdate(), this.pollingRate);
         }, { lastCommit: this.lastCommit });
+        if (this.pollingRate)
+            window.setTimeout(() => this.CheckForUpdate(), this.pollingRate);
     }
 	socket;
     serverUrl = "http://drivethruspa.cloudapp.net:1337";

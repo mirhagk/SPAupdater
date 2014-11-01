@@ -25,11 +25,11 @@ var Updater = (function () {
         var _this = this;
         Ajax.Get(this.serverUrl + '/api/getchanges', function (res) {
             console.log(res);
-            if (_this.pollingRate)
-                window.setTimeout(function () {
-                    return _this.CheckForUpdate();
-                }, _this.pollingRate);
         }, { lastCommit: this.lastCommit });
+        if (this.pollingRate)
+            window.setTimeout(function () {
+                return _this.CheckForUpdate();
+            }, this.pollingRate);
     };
 
     Updater.prototype.RegisterWebSocket = function () {
