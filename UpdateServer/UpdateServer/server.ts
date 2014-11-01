@@ -1,5 +1,4 @@
 import http = require('http');
-var io = require('socket.io')(http);
 var readline = require('readline');
 var esprima = require('esprima');
 var jsdiff = require('diff');
@@ -29,11 +28,7 @@ var rl = readline.createInterface({
 });
 loadCommit(null);
 
-io.set('origins', '*:*');
-io.on('connection', function (socket) {
-    rl.write('a user connected');
-    sockets.push(socket);
-});
+
 function findAllFunctions(parseTree, parent) {
     if (parseTree == null) return [];
     parseTree.parent = parent;
@@ -168,8 +163,7 @@ function commandResponse(command) {
             process.exit();
             return;
         case "push":
-            io.emit('update page', 'hey, update the page');
-            sockets.forEach((s) => { rl.write('sending to client A'); s.emit('update page', ''); });
+            sockets.forEach((s) => { rl.write('sending to client A'); });
             break;
         case "detect":
             detectDifferences("tests/util.js.old", "tests/util.js", "javascript");
