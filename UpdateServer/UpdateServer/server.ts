@@ -74,6 +74,13 @@ function getChangedLines(diff) {
     }
     return changedSections;
 }
+function stageUpdate(f,code) {
+    switch (f[0]) {
+        case "Util":
+            updates.push({ updateType: 'component update', component: 'utility', name: f[1], code:code });
+            break;
+    }
+}
 
 function detectDifferences(oldFile, newFile, type) {
     if (type == "javascript") {
@@ -88,14 +95,16 @@ function detectDifferences(oldFile, newFile, type) {
                         var newCode = esprima.parse(newData, { loc: true, range: true });
                         var functions = findAllFunctions(newCode, null);
                         var changedLines = getChangedLines(difference);
-                    rl.write('\n' + JSON.stringify(difference));
-                    rl.write('\n' + JSON.stringify(changedLines));
-                    functions = functions.filter((f) => {
-                        return changedLines.some(cl=> cl[0] > f.loc.end.line && cl[1] > f.loc.start.line);
-                    });
-                        functions.forEach((x) => rl.write('\n'+JSON.stringify(x)));
-
-                        updates.push(['component update']);
+                        rl.write('\n' + JSON.stringify(difference));
+                        rl.write('\n' + JSON.stringify(changedLines));
+                        functions = functions.filter((f) => {
+                            return changedLines.some(cl=> cl[0] <= f[3].end.line && cl[1] >= f[3].start.line);
+                        });
+                        functions.forEach((f) => {
+                            rl.write('\n' + JSON.stringify(f));
+                            var code = newData.slice(f[2][0], f[2][1]);
+                            stageUpdate(f,code);
+                        });
                     }
                     catch (ex) {
                         updates.push(['page update']);
