@@ -6,17 +6,17 @@ class ServerResponse {
     type: string;
     data: any;
 }
-class Component{
+interface Component{
     componentType: ComponentType;
     name: string;
     code: string;
-    get Code() {
-        return eval(this.code);
-    }
 }
 class Updater{
     adapter: IAdapter;
-	
+
+    constructor() {
+        this.adapter = new DotAdapter();
+    }
 	socket;
     serverUrl = "http://localhost:1337/";
 	protocolVersion = "watchUpdate:0.1";
@@ -39,17 +39,18 @@ class Updater{
 		this.pendingUpdates++;
 		console.log('There are '+this.pendingUpdates+' updates pending. Refresh the page to get latest');
 	}
-	UpdateComponent(component:Component):void{
+    UpdateComponent(component: Component): void{
+        var func = new Function(component.code);
 		switch(component.componentType){
 			case ComponentType.View:
 				this.adapter.RefreshModelFromView(component.name);
-				this.adapter.RegisterView(component.name,component.Code);
+				this.adapter.RegisterView(component.name,func);
 				break;
 			case ComponentType.Utility:
-				this.adapter.RegisterUtility(component.name,component.Code);
+				this.adapter.RegisterUtility(component.name,func);
 				break;
 			case ComponentType.Controller:
-				this.adapter.RegisterController(component.name,component.Code);
+				this.adapter.RegisterController(component.name,func);
 				break;
 		}
 	}

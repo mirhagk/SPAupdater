@@ -1,9 +1,9 @@
-﻿function Start() {
+﻿var updater;
+function Start() {
     ApplyTemplate('navMenu', data);
     ApplyTemplate('header', headers);
     ApplyTemplate('mailList', jsonValues);
-    var updater = new Updater();
-    updater.RegisterWebSocket();
+    updater = new Updater();
 }
 function ApplyTemplate(id, data) {
     var template = document.getElementById(id + 'Template');
@@ -19,3 +19,6 @@ var headers = {
 var jsonValues = {
     emails: [{date: 'October 31, 2014', subject: 'YHack Today!', from: 'YHack', to: 'Me'}, {date: 'October 30, 2014', subject: 'YHack Tomorrow!', from: 'YHack', to: 'Me'}]
 };
+Util = {};
+Util.log = function (x) { console.log('foo'); }
+//updater.UpdateComponent({componentType: 1, name:'log', code:'console.log("bar");'})
