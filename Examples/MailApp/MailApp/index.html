@@ -4,49 +4,45 @@
             <ul>
             {{~it.inboxes:value:index}}
                 <li> 
-                    <a href="#" id="{{=value}}" onclick="Messages({{=value}})">{{=value}}</a>
+                    <a href="#" id="{{=value}}" onclick="Messages({{=value}})"><p class="mailbox">{{=value}}</p></a>
                 </li>
-            {{~}}
-            </ul>
-        </script>
-        <script type="text/x-template" id="headerTemplate">
-            <ul>
-            {{~it.headings:value:index}}
-                <span>{{=value}}</span>
             {{~}}
             </ul>
         </script>
         <script type="text/x-template" id="mailListTemplate">
-            <ul>
             {{~it.emails:value:index}}
-                <li>
-                    <a href="#">
-                        <span>{{=value.date}}</span>
-                        <span>{{=value.subject}}</span>
-                        <span>{{=value.from}}</span>
-                        <span>{{=value.to}}</span>
-                    </a>
-                </li>
+                <tr>
+                    <td class="colA"><a href="#">{{=value.from}}</a></td>
+                    <td class-"colB"><a href="#">{{=value.subject}}</a></td>
+                    <td class="colC"><a href="#">{{=value.date}}</a></td>
+                </tr>        
             {{~}}
-            </ul>
         </script>
         <script type="text/javascript" src="scripts/lib/doT.js"></script>
         <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
         <script type="text/javascript" src="scripts/spaupdater/DotAdapter.js"></script>
         <script type="text/javascript" src="scripts/spaupdater/Updater.js"></script>
         <script type="text/javascript" src="scripts/app.js"></script>
+        <link rel='stylesheet' href='css/style.css' type="text/css" charset="utf-8"/>
     </head>
     <body onload="Start()">
         <div id="navMenu">
 
         </div>
         <div id="contentPanel">
-            <div id="header">
-
-            </div>
-            <div id="mailList">
-
-            </div>
+            <table>
+                <tbody id="header">
+                    <tr>
+                        <td class="colA">From</td>
+                        <td class="colB">Subject</td>
+                        <td class="colC">Date</td>
+                    </tr>
+                </tbody>
+            </table>
+            <table>
+                <tbody id="mailList">
+                </tbody>
+            </table>
         </div>
     </body>
 </html>

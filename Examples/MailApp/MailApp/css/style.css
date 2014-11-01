@@ -1,0 +1,34 @@
+* { margin: 0; padding: 0; }
+body { 
+    background-color: #FFF;
+    width: 100%;
+}
+a { text-decoration: none; color: #000; }
+a:hover { background-color: #F3F3F3; }
+p, td { font-family: Helvetica, Arial, Sans-Serif; font-size: 12pt; }
+li { list-style: none; }
+#navMenu {
+    background-color: #F3F3F3;
+    width: 20%;
+    float: left;
+}
+#navMenu p { padding: 3% 0 3% 40%; }
+#navMenu p:hover, #mailList tr:hover { background-color: #F9F9F9!important; }
+#contentPanel {
+    width: 80%;
+    float: right;
+}
+#header { background-color: #F3F3F3; text-decoration: none; border: none; text-align: left; font-family: Helvetica, Arial, Sans-Serif; font-size: 14pt; }
+table { width: 100%; border-collapse: collapse; }
+td { padding: 1px; }
+.colA, th.colA {
+    width: 20%;
+}
+
+.colB, th.colB {
+    width: 60%;
+}
+
+.colC, th.colC {
+    width: 20%;
+}
