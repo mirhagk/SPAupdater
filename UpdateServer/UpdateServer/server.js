@@ -44,6 +44,25 @@ http.createServer(function (req, res) {
             }
         var updatesToDo = updateHistory.slice(lastHistoryIndex + 1);
         res.end(JSON.stringify(updatesToDo));
+    } else if (path == "/api/notifypull") {
+        var body = '';
+        req.on('data', function (data) {
+            body += data;
+
+            // 1e6 === 1 * Math.pow(10, 6) === 1 * 1000000 ~~~ 1MB
+            if (body.length > 1e6) {
+                // FLOOD ATTACK OR FAULTY CLIENT, NUKE REQUEST
+                req.connection.destroy();
+            }
+        });
+        req.on('end', function () {
+            rl.write(body);
+            var data = JSON.parse(body);
+            loadCommit(data.head);
+            // use POST
+        });
+        res.writeHead(200, { 'Content-Type': 'text/plain' });
+        res.end('Received, thanks github :) BTW can I have a job?');
     } else {
         res.writeHead(404, { 'Content-Type': 'text/plain' });
         res.end("The resource you're looking for is unavailable");
