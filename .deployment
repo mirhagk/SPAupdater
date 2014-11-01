@@ -3,4 +3,4 @@
 ;This file follows the .ini format, for more information see https://github.com/projectkudu/kudu/wiki/Customizing-deployments
 
 [config]
-project = webserver/webserver
+project = UpdateServer\UpdateServer
