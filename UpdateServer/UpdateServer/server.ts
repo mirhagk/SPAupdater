@@ -1,4 +1,4 @@
-﻿import http = require('http');
+import http = require('http');
 var io = require('socket.io')(http);
 var readline = require('readline');
 var esprima = require('esprima');
@@ -14,8 +14,8 @@ http.createServer(function (req, res) {
     res.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With, *');
     if (req.url.trim()=="/") {
-        res.writeHead(200, { 'Content-Type': 'text/plain' });
-        res.end('Hello World\n');
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.end('Hello World\n');
     }
 }).listen(port);
 
