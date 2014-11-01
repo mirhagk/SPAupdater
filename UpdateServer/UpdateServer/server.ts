@@ -13,18 +13,21 @@ http.createServer(function (req, res) {
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:44844');
     res.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With, *');
-    res.writeHead(200, { 'Content-Type': 'text/plain' });
-    res.end('Hello World\n');
+    if (req.url.trim()=="/") {
+        res.writeHead(200, { 'Content-Type': 'text/plain' });
+        res.end('Hello World\n');
+    }
 }).listen(port);
 
 var sockets = [];
-var updates = [];
+var updateHistory = [];
+var currentUpdates = [];
 
 var rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
 });
-
+loadCommit(null);
 
 io.set('origins', '*:*');
 io.on('connection', function (socket) {
@@ -79,7 +82,7 @@ function getChangedLines(diff) {
 function stageUpdate(f,code) {
     switch (f[0]) {
         case "Util":
-            updates.push({ updateType: 'component update', component: 'utility', name: f[1], code:code });
+            currentUpdates.push({ updateType: 'component update', component: 'utility', name: f[1], code:code });
             break;
     }
 }
@@ -88,12 +91,17 @@ function getTemplates(document) {
     return Array.prototype.slice.call(document.querySelectorAll('script[type*=template]'));    
 }
 
+function loadCommit(commitHash) {
+    var newUpdate = { Commit: commitHash, Updates: [] };
+    updateHistory.push(newUpdate);
+    currentUpdates = newUpdate.Updates;
+}
 function detectDifferences(oldFile, newFile, type) {
     if (type == "javascript") {
         fs.readFile(oldFile, 'utf8', (err, oldData) => {
             fs.readFile(newFile, 'utf8', (err2, newData) => {
                 if (err || err2) {
-                    updates.push({ updateType: "page update" });
+                    currentUpdates.push({ updateType: "page update" });
                 }
                 else {
                     var difference = jsdiff.diffLines(oldData, newData);
@@ -113,7 +121,7 @@ function detectDifferences(oldFile, newFile, type) {
                         });
                     }
                     catch (ex) {
-                        updates.push({ updateType: 'page update' });
+                        currentUpdates.push({ updateType: 'page update' });
                     }
                 }
             });
@@ -123,7 +131,7 @@ function detectDifferences(oldFile, newFile, type) {
         fs.readFile(oldFile, 'utf8', (err, oldData) => {
             fs.readFile(newFile, 'utf8', (err2, newData) => {
                 if (err || err2) {
-                    updates.push({ updateType: "page update" });
+                    currentUpdates.push({ updateType: "page update" });
                 }
                 else {
                     var oldDom = dom(oldData);
@@ -134,11 +142,11 @@ function detectDifferences(oldFile, newFile, type) {
                         var matchOldTemplate = oldTemplates.filter(ot=> nt.id == ot.id)[0];
                         if (matchOldTemplate) {
                             if (matchOldTemplate.innerHTML.trim() != nt.innerHTML.trim()) {
-                                updates.push({ updateType: 'component update', component: 'view', name: nt.id, code: nt.innerHTML});
+                                currentUpdates.push({ updateType: 'component update', component: 'view', name: nt.id, code: nt.innerHTML});
                             }
                         }
                         else
-                            updates.push({ updateType: 'component update', component: 'view', name: nt.id, code: nt.innerHTML, added: true });
+                            currentUpdates.push({ updateType: 'component update', component: 'view', name: nt.id, code: nt.innerHTML, added: true });
                     });
                     var compareResults = domCompare(oldDom, newDom);
                     var difference = compareResults.getDifferences();
@@ -148,7 +156,7 @@ function detectDifferences(oldFile, newFile, type) {
         });
     }
     else {
-        updates.push({ updateType: "page update" });
+        currentUpdates.push({ updateType: "page update" });
     }
 }
 
@@ -171,7 +179,7 @@ function commandResponse(command) {
             break;
         case "outputChanges":
             rl.write('Changes:');
-            updates.forEach((x) => rl.write(JSON.stringify(x)));
+            currentUpdates.forEach((x) => rl.write(JSON.stringify(x)));
             break;
         default:
             break;
