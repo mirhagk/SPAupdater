@@ -12,12 +12,26 @@ var ServerResponse = (function () {
 
 var Updater = (function () {
     function Updater() {
-        this.serverUrl = "http://localhost:1337/";
+        this.pollingRate = 2000;
+        this.lastCommit = null;
+        this.serverUrl = "http://localhost:1337";
         this.protocolVersion = "watchUpdate:0.1";
         this.pendingUpdates = 0;
         this.pendingFullPageUpdate = false;
         this.adapter = new DotAdapter();
+        this.CheckForUpdate();
     }
+    Updater.prototype.CheckForUpdate = function () {
+        var _this = this;
+        Ajax.Get(this.serverUrl + '/api/getchanges', function (res) {
+            console.log(res);
+            if (_this.pollingRate)
+                window.setTimeout(function () {
+                    return _this.CheckForUpdate();
+                }, _this.pollingRate);
+        }, { lastCommit: this.lastCommit });
+    };
+
     Updater.prototype.RegisterWebSocket = function () {
         var _this = this;
         this.socket = new io(this.serverUrl);

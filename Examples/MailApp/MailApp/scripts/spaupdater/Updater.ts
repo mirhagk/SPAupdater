@@ -16,9 +16,19 @@ class Updater{
 
     constructor() {
         this.adapter = new DotAdapter();
+        this.CheckForUpdate();
+    }
+    pollingRate = 2000;
+    lastCommit = null;
+    CheckForUpdate(): void {
+        Ajax.Get(this.serverUrl + '/api/getchanges', (res) => {
+            console.log(res);
+            if (this.pollingRate)
+                window.setTimeout(()=>this.CheckForUpdate(), this.pollingRate);
+        }, { lastCommit: this.lastCommit });
     }
 	socket;
-    serverUrl = "http://localhost:1337/";
+    serverUrl = "http://localhost:1337";
 	protocolVersion = "watchUpdate:0.1";
     RegisterWebSocket(): void{
         this.socket = new io(this.serverUrl);
