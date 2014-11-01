@@ -4,7 +4,7 @@
             <ul>
             {{~it.inboxes:value:index}}
                 <li> 
-                    <a href="" >{{=value}}!</a>
+                    <a href="#" id="{{=value}}" onclick="Messages({{=value}})">{{=value}}</a>
                 </li>
             {{~}}
             </ul>
@@ -20,7 +20,7 @@
             <ul>
             {{~it.emails:value:index}}
                 <li>
-                    <a href="">
+                    <a href="#">
                         <span>{{=value.date}}</span>
                         <span>{{=value.subject}}</span>
                         <span>{{=value.from}}</span>
@@ -36,7 +36,7 @@
         <script type="text/javascript" src="scripts/spaupdater/Updater.js"></script>
         <script type="text/javascript" src="scripts/app.js"></script>
     </head>
-    <body onload="Start();">
+    <body onload="Start()">
         <div id="navMenu">
 
         </div>
