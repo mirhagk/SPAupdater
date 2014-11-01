@@ -9,6 +9,8 @@
   },
   "dependencies": {
     "diff": "^1.0.8",
-    "esprima": "^1.2.2"
+    "dom-compare": "^0.2.0",
+    "esprima": "^1.2.2",
+    "jsdom":  "^1.1.0"
   }
 }
