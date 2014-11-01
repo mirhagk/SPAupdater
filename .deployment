@@ -1,0 +1,6 @@
+;Deployment commands
+;This file tells azure which folder to deploy as a website
+;This file follows the .ini format, for more information see https://github.com/projectkudu/kudu/wiki/Customizing-deployments
+
+[config]
+project = webserver/webserver
