@@ -3,7 +3,9 @@ var io = require('socket.io')(http);
 var readline = require('readline');
 var esprima = require('esprima');
 var jsdiff = require('diff');
-var fs = require('fs')
+var fs = require('fs');
+var domCompare = require('dom-compare').compare;
+var dom = require('jsdom').jsdom
 
 var port = 1337
 http.createServer(function (req, res) {
@@ -82,12 +84,16 @@ function stageUpdate(f,code) {
     }
 }
 
+function getTemplates(document) {
+    return Array.prototype.slice.call(document.querySelectorAll('script[type*=template]'));    
+}
+
 function detectDifferences(oldFile, newFile, type) {
     if (type == "javascript") {
         fs.readFile(oldFile, 'utf8', (err, oldData) => {
             fs.readFile(newFile, 'utf8', (err2, newData) => {
                 if (err || err2) {
-                    updates.push(['page update']);
+                    updates.push({ updateType: "page update" });
                 }
                 else {
                     var difference = jsdiff.diffLines(oldData, newData);
@@ -107,14 +113,42 @@ function detectDifferences(oldFile, newFile, type) {
                         });
                     }
                     catch (ex) {
-                        updates.push(['page update']);
+                        updates.push({ updateType: 'page update' });
                     }
                 }
             });
         });
     }
+    else if (type == "html") {
+        fs.readFile(oldFile, 'utf8', (err, oldData) => {
+            fs.readFile(newFile, 'utf8', (err2, newData) => {
+                if (err || err2) {
+                    updates.push({ updateType: "page update" });
+                }
+                else {
+                    var oldDom = dom(oldData);
+                    var newDom = dom(newData);
+                    var oldTemplates = getTemplates(oldDom);
+                    var newTemplates = getTemplates(newDom);
+                    newTemplates.forEach(nt=> {
+                        var matchOldTemplate = oldTemplates.filter(ot=> nt.id == ot.id)[0];
+                        if (matchOldTemplate) {
+                            if (matchOldTemplate.innerHTML.trim() != nt.innerHTML.trim()) {
+                                updates.push({ updateType: 'component update', component: 'view', name: nt.id, code: nt.innerHTML});
+                            }
+                        }
+                        else
+                            updates.push({ updateType: 'component update', component: 'view', name: nt.id, code: nt.innerHTML, added: true });
+                    });
+                    var compareResults = domCompare(oldDom, newDom);
+                    var difference = compareResults.getDifferences();
+                    rl.write(JSON.stringify(difference));
+                }
+            });
+        });
+    }
     else {
-        updates.push(["page update"]);
+        updates.push({ updateType: "page update" });
     }
 }
 
@@ -131,6 +165,9 @@ function commandResponse(command) {
             break;
         case "detect":
             detectDifferences("tests/util.js.old", "tests/util.js", "javascript");
+            break;
+        case "detectHtml":
+            detectDifferences("tests/test.html.old", "tests/test.html", "html");
             break;
         case "outputChanges":
             rl.write('Changes:');
