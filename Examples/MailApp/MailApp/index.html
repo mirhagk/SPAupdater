@@ -1,28 +1,49 @@
 <html>
     <head>
-        <script type="text/x-template" id="navBarTemplate">
+        <script type="text/x-template" id="navMenuTemplate">
             <ul>
             {{~it.inboxes:value:index}}
-                <li>{{=value}}!</li>
+                <li> 
+                    <a href="" >{{=value}}!</a>
+                </li>
+            {{~}}
+            </ul>
+        </script>
+        <script type="text/x-template" id="headerTemplate">
+            <ul>
+            {{~it.headings:value:index}}
+                <span>{{=value}}</span>
             {{~}}
             </ul>
         </script>
         <script type="text/x-template" id="mailListTemplate">
-            {{~it:value:index}}
-                <div>{{=value.subject}}</div>
+            <ul>
+            {{~it.emails:value:index}}
+                <li>
+                    <a href="">
+                        <span>{{=value.date}}</span>
+                        <span>{{=value.subject}}</span>
+                        <span>{{=value.from}}</span>
+                        <span>{{=value.to}}</span>
+                    </a>
+                </li>
             {{~}}
+            </ul>
         </script>
         <script type="text/javascript" src="scripts/lib/doT.js"></script>
-        <script type="text/javascript" src="scripts/spaupdater/DotAdapter.js"></script>
-        <script type="text/javascript" src="scripts/spaupdater/Updater.js"></script>
         <script type="text/javascript" src="scripts/app.js"></script>
     </head>
     <body onload="Start();">
-        <div id="navBar">
+        <div id="navMenu">
 
         </div>
-        <div id="mailList">
+        <div id="contentPanel">
+            <div id="header">
 
+            </div>
+            <div id="mailList">
+
+            </div>
         </div>
     </body>
 </html>
