@@ -1,0 +1,14 @@
+{
+  "name": "UpdateServer",
+  "version": "0.0.0",
+  "description": "UpdateServer",
+  "main": "app.js",
+  "author": {
+    "name": "mirhagk",
+    "email": ""
+  },
+  "dependencies": {
+    "diff": "^1.0.8",
+    "esprima": "^1.2.2"
+  }
+}
