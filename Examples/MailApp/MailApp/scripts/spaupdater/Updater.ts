@@ -28,7 +28,7 @@ class Updater{
         }, { lastCommit: this.lastCommit });
     }
 	socket;
-    serverUrl = "http://localhost:1337";
+    serverUrl = "http://drivethruspa.cloudapp.net:1337";
 	protocolVersion = "watchUpdate:0.1";
     RegisterWebSocket(): void{
         this.socket = new io(this.serverUrl);
