@@ -1,0 +1,1 @@
+﻿//# sourceMappingURL=AdapterInterface.js.map
