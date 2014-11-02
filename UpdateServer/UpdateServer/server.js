@@ -202,8 +202,6 @@ function detectDifferences(oldFile, newFile, type) {
                         var newCode = esprima.parse(newData, { loc: true, range: true });
                         var functions = findAllFunctions(newCode, null);
                         var changedLines = getChangedLines(difference);
-                        rl.write('\n' + JSON.stringify(difference));
-                        rl.write('\n' + JSON.stringify(changedLines));
                         functions = functions.filter(function (f) {
                             return changedLines.some(function (cl) {
                                 return cl[0] <= f[3].end.line && cl[1] >= f[3].start.line;
@@ -241,9 +239,6 @@ function detectDifferences(oldFile, newFile, type) {
                         } else
                             currentUpdates.push({ updateType: 'component update', component: 'view', name: nt.id, code: nt.innerHTML, added: true });
                     });
-                    var compareResults = domCompare(oldDom, newDom);
-                    var difference = compareResults.getDifferences();
-                    rl.write(JSON.stringify(difference));
                 }
             });
         });
@@ -273,6 +268,12 @@ function commandResponse(command) {
             rl.write('Changes:');
             currentUpdates.forEach(function (x) {
                 return rl.write(JSON.stringify(x));
+            });
+            break;
+        case "outputChangesShort":
+            rl.write('Changes:');
+            currentUpdates.map(function (x) {
+                return x.updateType + ":" + x.name;
             });
             break;
         default:
