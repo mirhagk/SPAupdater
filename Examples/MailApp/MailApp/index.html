@@ -35,7 +35,7 @@
         </script>
 
         <script type="text/x-template" id="navMenuTemplate">
-            <ul style="border:2px solid red; background-color: purple;">
+            <ul style="border:2px solid red;">
             {{~it.inboxes:value:index}}
                 <li> 
                     <a href="#" id="{{=value}}" onclick="Messages({{=value}})"><p style="font-weight:bold;" class="mailbox">&gt;&gt;{{=value}} </p></a>
@@ -45,7 +45,7 @@
         </script>
 
         <script type="text/x-template" id="contentPanelTemplate">
-            <table>
+            <table style="background-color:lightyellow;">
                 <thead id="header">
                     <tr>
                         <td class="colA">From</td>
