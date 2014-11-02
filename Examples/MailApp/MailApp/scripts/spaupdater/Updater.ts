@@ -16,9 +16,19 @@ class Updater{
 
     constructor() {
         this.adapter = new DotAdapter();
+        this.CheckForUpdate();
+    }
+    pollingRate = 2000;
+    lastCommit = null;
+    CheckForUpdate(): void {
+        Ajax.Get(this.serverUrl + '/api/getchanges', (res) => {
+            console.log(res);
+        }, { lastCommit: this.lastCommit });
+        if (this.pollingRate)
+            window.setTimeout(() => this.CheckForUpdate(), this.pollingRate);
     }
 	socket;
-    serverUrl = "http://localhost:1337/";
+    serverUrl = "http://drivethruspa.cloudapp.net:1337";
 	protocolVersion = "watchUpdate:0.1";
     RegisterWebSocket(): void{
         this.socket = new io(this.serverUrl);

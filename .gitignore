@@ -182,5 +182,7 @@ UpgradeLog*.htm
 # Microsoft Fakes
 FakesAssemblies/
 *.map
-/UpdateServer/UpdateServer/server.js
+
+
+# Custom stuff
 /UpdateServer/UpdateServer/.ntvs_analysis.dat
