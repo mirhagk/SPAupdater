@@ -86,7 +86,7 @@ http.createServer(function (req, res) {
                                 detectDifferences('temp/' + file + '.old', 'temp/' + file, type);
                                 rl.write('\ndownloaded ' + file);
                                 countDone++;
-                                if (countDone >= commit.modified)
+                                if (countDone >= commit.modified.length)
                                     loadCommit();
                             });
                         });
