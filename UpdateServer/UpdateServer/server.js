@@ -19,6 +19,10 @@ if (!String.prototype.startsWith) {
     });
 }
 
+var config = {
+    srcRoutePath: 'Examples/MailApp/MailApp/'
+};
+
 var port = 1337;
 http.createServer(function (req, res) {
     res.setHeader('Access-Control-Allow-Credentials', 'true');
@@ -58,7 +62,20 @@ http.createServer(function (req, res) {
         req.on('end', function () {
             rl.write(body);
             var data = JSON.parse(body);
-            loadCommit(data.head);
+            loadCommit(data.head_commit.id);
+            data.commits.forEach(function (commit) {
+                var commitUrl = commit.url.replace('github', 'raw.githubusercontent').replace('commit/', '') + '/';
+                var previousCommitUrl = commitUrl;
+                if (commit.added.length > 0)
+                    currentUpdates.push({ updateType: 'page update' });
+                commit.modified.forEach(function (file) {
+                    download(commitUrl + file, 'temp/' + file, function () {
+                        download(previousCommitUrl, 'temp/' + file + '.old', function () {
+                            rl.write('downloaded ' + file);
+                        });
+                    });
+                });
+            });
             // use POST
         });
         res.writeHead(200, { 'Content-Type': 'text/plain' });
@@ -68,6 +85,15 @@ http.createServer(function (req, res) {
         res.end("The resource you're looking for is unavailable");
     }
 }).listen(port);
+var download = function (url, dest, cb) {
+    var file = fs.createWriteStream(dest);
+    var request = http.get(url, function (response) {
+        response.pipe(file);
+        file.on('finish', function () {
+            file.close(cb);
+        });
+    });
+};
 
 var sockets = [];
 var updateHistory = [];
@@ -124,6 +150,12 @@ function stageUpdate(f, code) {
     switch (f[0]) {
         case "Util":
             currentUpdates.push({ updateType: 'component update', component: 'utility', name: f[1], code: code });
+            break;
+        case "Controller":
+            currentUpdates.push({ updateType: 'component update', component: 'controller', name: f[1], code: code });
+            break;
+        default:
+            currentUpdates.push({ updateType: 'component update', component: f[0], name: f[1], code: code });
             break;
     }
 }
