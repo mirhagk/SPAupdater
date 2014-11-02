@@ -1,4 +1,4 @@
-var DotAdapter = (function () {
+﻿var DotAdapter = (function () {
     function DotAdapter() {
     }
     DotAdapter.prototype.RegisterController = function (controllerName, controller) {
@@ -10,7 +10,7 @@ var DotAdapter = (function () {
     DotAdapter.prototype.RefreshModelFromView = function (viewName) {
     };
     DotAdapter.prototype.RegisterView = function (viewName, view) {
-        document.getElementById(viewName + 'Template').innerHTML = view;
+        document.getElementById(viewName).innerHTML = view;
         RefreshTemplates();
     };
     DotAdapter.prototype.RegisterCustom = function (componentType, componentName, code) {
