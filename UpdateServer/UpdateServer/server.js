@@ -89,6 +89,7 @@ http.createServer(function (req, res) {
     }
 }).listen(port);
 var download = function (url, dest, cb) {
+    rl.write(path.dirname('\n' + dest));
     mkpath(path.dirname(dest), function () {
         var file = fs.createWriteStream(dest);
         file.on('finish', function () {
