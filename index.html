@@ -44,6 +44,23 @@
 <p>Drive-Thru SPA seeks to solve this issue. It's a library designed to work with web application frameworks, watch for changes to the application, and seamlessly update the application behind the scenes.</p>
 
 <h3>
+<a name="current-status" class="anchor" href="#current-status"><span class="octicon octicon-link"></span></a>Current Status</h3>
+
+<p>This is a prototype of the library, developed in 36 hours at YHACK (Yale University Hackathon).</p>
+
+<p>What the library currently has is a node-js server that a client library can connect to, and watch for updates. Updates are automatically detected from a git push when the appropriate webhook is set up in github. These updates are downloaded and components are extracted and analyzed for differences. The library sends any updated components to any listening client. These clients can then update the component, do any registering of the component or refreshing of views etc. Because the differences are analyzed and updated at a component level, the majority of changes can be done seamlessly, and the user doesn't even have to know that the application is being updated while they are using it.</p>
+
+<p>There are a few things missing from the library:</p>
+
+<ul>
+	<li>There are no alternative adapters developed yet - only the custom doT.js one is supported</li>
+	<li>The server code is messy, and needs to be re-architectured. (It was built in 36 hours during a hack-a-thon after all)</li>
+	<li>There isn't any concern for security or prevention of race conditions - This was not a priority for the prototype, but is required before a usable release</li>
+</ul>
+
+<p>The next steps to go from here </p>
+
+<h3>
 <a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
 <p>Nathan Jervis - <a href="https://github.com/mirhagk" class="user-mention">@mirhagk</a></p>
 <p>Sadisha Galapatti - <a href="https://github.com/sadishag" class="user-mention">@sadishag</a></p>
