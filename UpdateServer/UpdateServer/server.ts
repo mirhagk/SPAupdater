@@ -6,6 +6,7 @@ var fs = require('fs');
 var domCompare = require('dom-compare').compare;
 var dom = require('jsdom').jsdom
 var urlParse = require('url').parse;
+var mkdirp = require('mkdirp');
 
 if (!(<any>String.prototype).startsWith) {
     Object.defineProperty(String.prototype, 'startsWith', {
@@ -91,11 +92,13 @@ http.createServer(function (req, res) {
     }
 }).listen(port);
 var download = function (url, dest, cb) {
-    var file = fs.createWriteStream(dest);
-    var request = http.get(url, function (response) {
-        response.pipe(file);
-        file.on('finish', function () {
-            file.close(cb);
+    mkdirp(dest, () => {
+        var file = fs.createWriteStream(dest);
+        var request = http.get(url, function (response) {
+            response.pipe(file);
+            file.on('finish', function () {
+                file.close(cb);
+            });
         });
     });
 }
