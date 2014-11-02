@@ -68,6 +68,9 @@ var Updater = (function () {
         console.log('There are ' + this.pendingUpdates + ' updates pending. Refresh the page to get latest');
     };
     Updater.prototype.UpdateComponent = function (component) {
+        if (this.pendingFullPageUpdate) {
+            this.UpdatePage();
+        }
         switch (component.component) {
             case "view":
                 this.adapter.RefreshModelFromView(component.name);

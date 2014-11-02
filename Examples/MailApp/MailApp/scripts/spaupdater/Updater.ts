@@ -65,6 +65,9 @@ class Updater{
 		console.log('There are '+this.pendingUpdates+' updates pending. Refresh the page to get latest');
 	}
     UpdateComponent(component: Component): void{
+        if (this.pendingFullPageUpdate) {
+            this.UpdatePage();
+        }
 		switch(component.component){
 			case "view":
 				this.adapter.RefreshModelFromView(component.name);
