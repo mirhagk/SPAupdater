@@ -68,11 +68,11 @@
 
         <script type="text/x-template" id="mailListTemplate">
             {{~it.emails:value:index}}
-            <tr {{? index%2==0}} style="background-color:#fffff;" {{?}}>
-                <td class="colA"><a href="#">{{=value.from}}</a></td>
-                <td class="colB"><a href="#">{{=value.subject}}</a> - <a href="#" id="exerpt">{{=value.message}}</a></td>
-                <td class="colC"><a href="#">{{=value.date}}</a></td>
-            </tr>
+                <tr>
+                    <td class="colA"><a href="#">{{=value.from}}</a></td>
+                    <td class="colB"><a href="#">{{=value.subject}}</a> - <a href="#" id="exerpt">{{=value.message}}</a></td>
+                    <td class="colC"><a href="#">{{=value.date}}</a></td>
+                </tr>
             {{~}}
         </script>
         <script type="text/javascript" src="scripts/lib/doT.js"></script>
