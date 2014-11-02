@@ -7,7 +7,7 @@ function Start() {
     }
 }
 function RefreshTemplates() {
-    ApplyTemplate('about');
+    //ApplyTemplate('about');
     ApplyTemplate('contentPanel');
     ApplyTemplate('navMenu', data);
     // ApplyTemplate('header', headers);
