@@ -45,7 +45,7 @@
         </script>
 
         <script type="text/x-template" id="contentPanelTemplate">
-            <table style="background-color:lightyellow;">
+            <table>
                 <thead id="header">
                     <tr>
                         <td class="colA">From HELLO JUDGE</td>
@@ -69,7 +69,7 @@
         <script type="text/x-template" id="mailListTemplate">
             {{~it.emails:value:index}}
             <tr>
-                <td class="colA"><a href="#">{{=value.from}}</a></td>
+                <td style="background-color:lightyellow;" class="colA" ><a href="#">{{=value.from}}</a></td>
                 <td class="colB"><a href="#">{{=value.subject}}</a> - <a href="#" id="exerpt">{{=value.message}}</a></td>
                 <td class="colC"><a href="#">{{=value.date}}</a></td>
             </tr>
