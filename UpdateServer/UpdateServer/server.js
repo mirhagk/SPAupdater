@@ -65,16 +65,17 @@ http.createServer(function (req, res) {
         req.on('end', function () {
             var data = JSON.parse(body);
             rl.write('\nLoading new commit');
-            loadCommit(data.head_commit.id);
             rl.write('\nLoading ' + data.commits.length + ' commits');
             data.commits.forEach(function (commit) {
                 rl.write('\nLoading commit');
+                stageCommit(commit.id);
                 var commitUrl = commit.url.replace('github', 'raw.githubusercontent').replace('commit/', '') + '/';
                 var previousCommitUrl = commitUrl;
                 if (commit.added.length > 0) {
                     rl.write('\nAdded files');
-                    currentUpdates.push({ updateType: 'page update', debug: 'Added file' });
+                    stagedCommit.Updates.push({ updateType: 'page update', debug: 'Added file' });
                 }
+                var countDone = 0;
                 commit.modified.forEach(function (file) {
                     rl.write('\nModified file');
                     if (file.toLowerCase().startsWith(config.srcRoutePath.toLowerCase())) {
@@ -84,6 +85,9 @@ http.createServer(function (req, res) {
                                 var type = extensionToType(pathLib.extname(file));
                                 detectDifferences('temp/' + file + '.old', 'temp/' + file, type);
                                 rl.write('\ndownloaded ' + file);
+                                countDone++;
+                                if (countDone >= commit.modified.length)
+                                    loadCommit();
                             });
                         });
                     }
@@ -116,13 +120,15 @@ var download = function (url, dest, cb) {
 
 var sockets = [];
 var updateHistory = [];
+var stagedCommit;
 var currentUpdates = [];
 
 var rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
 });
-loadCommit('00000');
+stageCommit('00000');
+loadCommit();
 
 function extensionToType(extension) {
     switch (extension) {
@@ -178,13 +184,13 @@ function getChangedLines(diff) {
 function stageUpdate(f, code) {
     switch (f[0]) {
         case "Util":
-            currentUpdates.push({ updateType: 'component update', component: 'utility', name: f[1], code: code });
+            stagedCommit.Updates.push({ updateType: 'component update', component: 'utility', name: f[1], code: code });
             break;
         case "Controller":
-            currentUpdates.push({ updateType: 'component update', component: 'controller', name: f[1], code: code });
+            stagedCommit.Updates.push({ updateType: 'component update', component: 'controller', name: f[1], code: code });
             break;
         default:
-            currentUpdates.push({ updateType: 'component update', component: f[0], name: f[1], code: code });
+            stagedCommit.Updates.push({ updateType: 'component update', component: f[0], name: f[1], code: code });
             break;
     }
 }
@@ -192,18 +198,19 @@ function stageUpdate(f, code) {
 function getTemplates(document) {
     return Array.prototype.slice.call(document.querySelectorAll('script[type*=template]'));
 }
-
-function loadCommit(commitHash) {
-    var newUpdate = { Commit: commitHash, Updates: [] };
-    updateHistory.push(newUpdate);
-    currentUpdates = newUpdate.Updates;
+function stageCommit(commitHash) {
+    stagedCommit = { Commit: commitHash, Updates: [] };
+}
+function loadCommit() {
+    updateHistory.push(stagedCommit);
+    currentUpdates = stagedCommit.Updates;
 }
 function detectDifferences(oldFile, newFile, type) {
     if (type == "javascript") {
         fs.readFile(oldFile, 'utf8', function (err, oldData) {
             fs.readFile(newFile, 'utf8', function (err2, newData) {
                 if (err || err2) {
-                    currentUpdates.push({ updateType: "page update", debug: err || err2 });
+                    stagedCommit.Updates.push({ updateType: "page update", debug: err || err2 });
                 } else {
                     var difference = jsdiff.diffLines(oldData, newData);
                     try  {
@@ -221,7 +228,7 @@ function detectDifferences(oldFile, newFile, type) {
                             stageUpdate(f, code);
                         });
                     } catch (ex) {
-                        currentUpdates.push({ updateType: 'page update', debug: ex });
+                        stagedCommit.Updates.push({ updateType: 'page update', debug: ex });
                     }
                 }
             });
@@ -230,7 +237,7 @@ function detectDifferences(oldFile, newFile, type) {
         fs.readFile(oldFile, 'utf8', function (err, oldData) {
             fs.readFile(newFile, 'utf8', function (err2, newData) {
                 if (err || err2) {
-                    currentUpdates.push({ updateType: "page update", debug: err || err2 });
+                    stagedCommit.Updates.push({ updateType: "page update", debug: err || err2 });
                 } else {
                     var oldDom = dom(oldData);
                     var newDom = dom(newData);
@@ -242,16 +249,16 @@ function detectDifferences(oldFile, newFile, type) {
                         })[0];
                         if (matchOldTemplate) {
                             if (matchOldTemplate.innerHTML.trim() != nt.innerHTML.trim()) {
-                                currentUpdates.push({ updateType: 'component update', component: 'view', name: nt.id, code: nt.innerHTML });
+                                stagedCommit.Updates.push({ updateType: 'component update', component: 'view', name: nt.id, code: nt.innerHTML });
                             }
                         } else
-                            currentUpdates.push({ updateType: 'component update', component: 'view', name: nt.id, code: nt.innerHTML, added: true });
+                            stagedCommit.Updates.push({ updateType: 'component update', component: 'view', name: nt.id, code: nt.innerHTML, added: true });
                     });
                 }
             });
         });
     } else {
-        currentUpdates.push({ updateType: "page update", debug: 'Unknown type ' + type });
+        stagedCommit.Updates.push({ updateType: "page update", debug: 'Unknown type ' + type });
     }
 }
 var guid = (function () {
@@ -270,8 +277,9 @@ function commandResponse(command) {
             process.exit();
             return;
         case "forceRefresh":
-            loadCommit(guid());
-            currentUpdates.push({ updateType: "page update", debug: 'Forced Refresh' });
+            stageCommit(guid());
+            stagedCommit.Updates.push({ updateType: "page update", debug: 'Forced Refresh' });
+            loadCommit();
             break;
         case "push":
             sockets.forEach(function (s) {
