@@ -75,6 +75,7 @@ http.createServer(function (req, res) {
                     rl.write('\nAdded files');
                     stagedCommit.Updates.push({ updateType: 'page update', debug: 'Added file' });
                 }
+                var countDone = 0;
                 commit.modified.forEach(function (file) {
                     rl.write('\nModified file');
                     if (file.toLowerCase().startsWith(config.srcRoutePath.toLowerCase())) {
@@ -84,11 +85,13 @@ http.createServer(function (req, res) {
                                 var type = extensionToType(pathLib.extname(file));
                                 detectDifferences('temp/' + file + '.old', 'temp/' + file, type);
                                 rl.write('\ndownloaded ' + file);
+                                countDone++;
+                                if (countDone >= commit.modified)
+                                    loadCommit();
                             });
                         });
                     }
                 });
-                loadCommit();
             });
             // use POST
         });
