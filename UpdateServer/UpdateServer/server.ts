@@ -105,7 +105,9 @@ http.createServer(function (req, res) {
         res.writeHead(404, { 'Content-Type': 'text/plain' });
         res.end("The resource you're looking for is unavailable");
     }
-}).listen(port);
+}).listen(port, null, null, (err) => {
+    rl.write('Error listening ' + JSON.stringify(err));
+});
 var download = function (url, dest, cb) {
     mkpath(pathLib.dirname(dest), () => {
         var file = fs.createWriteStream(dest);
