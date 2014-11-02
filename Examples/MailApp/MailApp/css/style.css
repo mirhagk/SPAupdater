@@ -20,6 +20,13 @@ li { list-style: none; }
 }
 #header { background-color: #F3F3F3; text-decoration: none; border: none; text-align: left; font-family: Helvetica, Arial, Sans-Serif; font-size: 14pt; }
 table { width: 100%; border-collapse: collapse; }
+#mailList {
+    position: absolute;
+	min-height: 100px;
+	max-height: 100px;
+    overflow: auto;
+}
+}
 td { padding: 1px; }
 .colA, th.colA {
     width: 20%;

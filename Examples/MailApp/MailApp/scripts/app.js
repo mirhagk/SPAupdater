@@ -10,6 +10,13 @@ function RefreshTemplates() {
     SetFocus('Inbox');
 }
 
+//function ShowContent() {
+//    ApplyTemplate('navMenu', data);
+//    // ApplyTemplate('header', headers);
+//    ApplyTemplate('mailList', inboxValues);
+//    SetFocus
+//}
+
 function Messages(id) {
     var template = document.getElementById('mailListTemplate');
     var target = document.getElementById('mailList');
@@ -52,6 +59,8 @@ var spamValues = {
 var trashValues = {
     emails: [{date: 'Oct 27', subject: 'Groupon Deals', from: 'Groupon', to: 'Me'}, {date: 'Oct 26', subject: 'Engineering Ethics TA Position', from: 'Laurie LeBlanc', to: 'Me'}, {date: 'Oct 25', subject: 'YouTube Subscription Updates', from: 'YouTube', to: 'Me'}, {date: 'Oct 25', subject: 'Updated Terms of Service: WE OWN YOUR SOUL', from: 'Facebook', to: 'Me'}]
 };
+
+
 
 function SetFocus(mailboxName) {
     var targets = document.getElementById('navMenu').getElementsByTagName('p');
