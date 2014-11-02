@@ -2,6 +2,9 @@
 function Start() {
     RefreshTemplates();
     updater = new Updater();
+    updater.updatePageNotification = function (numberOfUpdates) {
+        ApplyTemplate('notificationBox', { numberOfUpdates: numberOfUpdates });
+    }
 }
 function RefreshTemplates() {
     ApplyTemplate('about');

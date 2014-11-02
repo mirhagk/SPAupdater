@@ -13,6 +13,9 @@ interface Component{
 }
 class Updater{
     adapter: IAdapter;
+    public updatePageNotification: {
+            (numberOfUpdates:number):void
+    }
 
     constructor() {
         this.adapter = new DotAdapter();
@@ -71,7 +74,9 @@ class Updater{
 	pendingFullPageUpdate=false;
 	UpdatePage(){
 		this.pendingFullPageUpdate = true;
-		this.pendingUpdates++;
+        this.pendingUpdates++;
+        if (this.updatePageNotification)
+            this.updatePageNotification(this.pendingUpdates);
 		console.log('There are '+this.pendingUpdates+' updates pending. Refresh the page to get latest');
 	}
     UpdateComponent(component: Component): void{

@@ -27,10 +27,16 @@
             </p>
         </script>
 
+        <script type="text/template" id="notificationBoxTemplate">
+            <span style="position:absolute;bottom:0px;border-color:black;background-color:lightyellow;">
+                You have {{=it.numberOfUpdates}} pending notifications, please refresh to get the latest
+            </span>
+        </script>
+
         <script type="text/x-template" id="navMenuTemplate">
             <ul>
             {{~it.inboxes:value:index}}
-                <li> 
+                <li>
                     <a href="#" id="{{=value}}" onclick="Messages({{=value}})"><p class="mailbox">{{=value}}</p></a>
                 </li>
             {{~}}
@@ -51,7 +57,7 @@
                 <tbody id="mailList">
                 </tbody>
             </table>
-      
+
             <table>
                 <tbody id="content">
 
@@ -65,7 +71,7 @@
                     <td class="colA"><a href="#">{{=value.from}}</a></td>
                     <td class="colB"><a href="#">{{=value.subject}}</a></td>
                     <td class="colC"><a href="#">{{=value.date}}</a></td>
-                </tr>        
+                </tr>
             {{~}}
         </script>
         <script type="text/javascript" src="scripts/lib/doT.js"></script>
@@ -84,6 +90,9 @@
             
         </div>
         <div id="about">
+
+        </div>
+        <div id="notificationBox">
 
         </div>
     </body>
