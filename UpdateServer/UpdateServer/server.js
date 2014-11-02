@@ -102,7 +102,6 @@ http.createServer(function (req, res) {
     }
 }).listen(port);
 var download = function (url, dest, cb) {
-    rl.write(pathLib.dirname('\n' + dest));
     mkpath(pathLib.dirname(dest), function () {
         var file = fs.createWriteStream(dest);
         file.on('finish', function () {
@@ -280,6 +279,8 @@ function commandResponse(command) {
             rl.write('Changes:');
             currentUpdates.map(function (x) {
                 return x.updateType + ":" + x.name;
+            }).forEach(function (x) {
+                rl.write(x);
             });
             break;
         default:
