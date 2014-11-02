@@ -65,7 +65,6 @@ http.createServer(function (req, res) {
             }
         });
         req.on('end', function () {
-            rl.write(body);
             var data = JSON.parse(body);
             loadCommit(data.head_commit.id);
             data.commits.forEach((commit) => {
@@ -77,9 +76,10 @@ http.createServer(function (req, res) {
                     if (file.toLowerCase().startsWith(config.srcRoutePath.toLowerCase())) {
                         download(commitUrl + file, 'temp/' + file, () => {
                             download(previousCommitUrl, 'temp/' + file + '.old', () => {
+                                rl.write('\nFile: ' + file + '\t, Extension: ' + pathLib.extname(file));
                                 var type = extensionToType(pathLib.extname(file));
                                 detectDifferences('temp/' + file + '.old', 'temp/' + file, type);
-                                rl.write('downloaded ' + file);
+                                rl.write('\ndownloaded ' + file);
                             });
                         });
                     }
