@@ -8,7 +8,7 @@ var dom = require('jsdom').jsdom
 var urlParse = require('url').parse;
 var mkpath = require('mkpath');
 var requestClient = require('request');
-var path = require('path');
+var pathLib = require('path');
 
 if (!(<any>String.prototype).startsWith) {
     Object.defineProperty(String.prototype, 'startsWith', {
@@ -77,7 +77,7 @@ http.createServer(function (req, res) {
                     if (file.toLowerCase().startsWith(config.srcRoutePath.toLowerCase())) {
                         download(commitUrl + file, 'temp/' + file, () => {
                             download(previousCommitUrl, 'temp/' + file + '.old', () => {
-                                var type = extensionToType(path.extname(file));
+                                var type = extensionToType(pathLib.extname(file));
                                 detectDifferences('temp/' + file + '.old', 'temp/' + file, type);
                                 rl.write('downloaded ' + file);
                             });
@@ -97,8 +97,8 @@ http.createServer(function (req, res) {
     }
 }).listen(port);
 var download = function (url, dest, cb) {
-    rl.write(path.dirname('\n'+dest));
-    mkpath(path.dirname(dest), () => {
+    rl.write(pathLib.dirname('\n'+dest));
+    mkpath(pathLib.dirname(dest), () => {
         var file = fs.createWriteStream(dest);
         file.on('finish', () => {
             file.close(cb);
