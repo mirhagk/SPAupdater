@@ -1,14 +1,23 @@
-<html>
+﻿<html>
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>DriveThruSPA</title>
 
         <link rel="stylesheet" href="css/normalize.css">
-        <link rel="stylesheet" hrsef="css/style.css">
+        <link rel="stylesheet" href="css/style.css">
         <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
 
+        <script type="text/template" id="aboutTemplate">
+            <p>
+                #Drive-Thru SPA#
+
+                Drive-Thru SPA (Single Page Application) is a library for dynamically updating code. There are many Single Page Application frameworks to handle updating the code without the user refreshing the page.
+
+                ##Interaction with existing SPA##
+            </p>
+        </script>
 
         <script type="text/x-template" id="navMenuTemplate">
             <ul>
@@ -46,7 +55,7 @@
             {{~it.emails:value:index}}
                 <tr>
                     <td class="colA"><a href="#">{{=value.from}}</a></td>
-                    <td class-"colB"><a href="#">{{=value.subject}}</a></td>
+                    <td class="colB"><a href="#">{{=value.subject}}</a></td>
                     <td class="colC"><a href="#">{{=value.date}}</a></td>
                 </tr>        
             {{~}}

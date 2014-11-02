@@ -6,6 +6,9 @@ var fs = require('fs');
 var domCompare = require('dom-compare').compare;
 var dom = require('jsdom').jsdom;
 var urlParse = require('url').parse;
+var mkpath = require('mkpath');
+var requestClient = require('request');
+var pathLib = require('path');
 
 if (!String.prototype.startsWith) {
     Object.defineProperty(String.prototype, 'startsWith', {
@@ -60,38 +63,46 @@ http.createServer(function (req, res) {
             }
         });
         req.on('end', function () {
-            rl.write(body);
             var data = JSON.parse(body);
             loadCommit(data.head_commit.id);
             data.commits.forEach(function (commit) {
                 var commitUrl = commit.url.replace('github', 'raw.githubusercontent').replace('commit/', '') + '/';
                 var previousCommitUrl = commitUrl;
                 if (commit.added.length > 0)
-                    currentUpdates.push({ updateType: 'page update' });
+                    currentUpdates.push({ updateType: 'page update', debug: 'Added file' });
                 commit.modified.forEach(function (file) {
-                    download(commitUrl + file, 'temp/' + file, function () {
-                        download(previousCommitUrl, 'temp/' + file + '.old', function () {
-                            rl.write('downloaded ' + file);
+                    if (file.toLowerCase().startsWith(config.srcRoutePath.toLowerCase())) {
+                        download(commitUrl + file, 'temp/' + file, function () {
+                            download(previousCommitUrl, 'temp/' + file + '.old', function () {
+                                rl.write('\nFile: ' + file + '\t, Extension: ' + pathLib.extname(file));
+                                var type = extensionToType(pathLib.extname(file));
+                                detectDifferences('temp/' + file + '.old', 'temp/' + file, type);
+                                rl.write('\ndownloaded ' + file);
+                            });
                         });
-                    });
+                    }
                 });
             });
             // use POST
         });
         res.writeHead(200, { 'Content-Type': 'text/plain' });
         res.end('Received, thanks github :) BTW can I have a job?');
+    } else if (path == '/api/latestcommit') {
+        res.writeHead(200, { 'Content-Type': 'text/plain' });
+        res.end(JSON.stringify({ Commit: updateHistory[updateHistory.length - 1].Commit }));
     } else {
         res.writeHead(404, { 'Content-Type': 'text/plain' });
         res.end("The resource you're looking for is unavailable");
     }
 }).listen(port);
 var download = function (url, dest, cb) {
-    var file = fs.createWriteStream(dest);
-    var request = http.get(url, function (response) {
-        response.pipe(file);
+    rl.write(pathLib.dirname('\n' + dest));
+    mkpath(pathLib.dirname(dest), function () {
+        var file = fs.createWriteStream(dest);
         file.on('finish', function () {
             file.close(cb);
         });
+        requestClient(url).pipe(file);
     });
 };
 
@@ -105,6 +116,16 @@ var rl = readline.createInterface({
 });
 loadCommit('00000');
 
+function extensionToType(extension) {
+    switch (extension) {
+        case ".js":
+            return "javascript";
+        case ".html":
+            return "html";
+        default:
+            return "unknown";
+    }
+}
 function findAllFunctions(parseTree, parent) {
     if (parseTree == null)
         return [];
@@ -174,7 +195,7 @@ function detectDifferences(oldFile, newFile, type) {
         fs.readFile(oldFile, 'utf8', function (err, oldData) {
             fs.readFile(newFile, 'utf8', function (err2, newData) {
                 if (err || err2) {
-                    currentUpdates.push({ updateType: "page update" });
+                    currentUpdates.push({ updateType: "page update", debug: err || err2 });
                 } else {
                     var difference = jsdiff.diffLines(oldData, newData);
                     try  {
@@ -194,7 +215,7 @@ function detectDifferences(oldFile, newFile, type) {
                             stageUpdate(f, code);
                         });
                     } catch (ex) {
-                        currentUpdates.push({ updateType: 'page update' });
+                        currentUpdates.push({ updateType: 'page update', debug: ex });
                     }
                 }
             });
@@ -203,7 +224,7 @@ function detectDifferences(oldFile, newFile, type) {
         fs.readFile(oldFile, 'utf8', function (err, oldData) {
             fs.readFile(newFile, 'utf8', function (err2, newData) {
                 if (err || err2) {
-                    currentUpdates.push({ updateType: "page update" });
+                    currentUpdates.push({ updateType: "page update", debug: err || err2 });
                 } else {
                     var oldDom = dom(oldData);
                     var newDom = dom(newData);
@@ -227,7 +248,7 @@ function detectDifferences(oldFile, newFile, type) {
             });
         });
     } else {
-        currentUpdates.push({ updateType: "page update" });
+        currentUpdates.push({ updateType: "page update", debug: 'Unknown type ' + type });
     }
 }
 
