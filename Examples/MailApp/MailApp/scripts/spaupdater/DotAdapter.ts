@@ -9,7 +9,7 @@ class DotAdapter implements IAdapter{
 		
 	}
     RegisterView(viewName: string, view: any): void{
-        document.getElementById(viewName + 'Template').innerHTML = view;
+        document.getElementById(viewName).innerHTML = view;
         RefreshTemplates();
     }
     RegisterCustom(componentType: string, componentName: string, code: any): void {
