@@ -73,7 +73,7 @@ class Updater{
 			case "utility":
                 this.adapter.RegisterUtility(component.name, component.code);
 				break;
-			case ComponentType.Controller:
+			case "controller":
                 this.adapter.RegisterController(component.name, component.code);
 				break;
 		}

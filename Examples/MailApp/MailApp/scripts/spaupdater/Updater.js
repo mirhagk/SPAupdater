@@ -76,7 +76,7 @@ var Updater = (function () {
             case "utility":
                 this.adapter.RegisterUtility(component.name, component.code);
                 break;
-            case 2 /* Controller */:
+            case "controller":
                 this.adapter.RegisterController(component.name, component.code);
                 break;
         }
