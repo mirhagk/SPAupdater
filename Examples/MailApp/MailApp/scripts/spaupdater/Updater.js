@@ -35,7 +35,7 @@ var Updater = (function () {
                     if (update.updateType == "page update")
                         _this.UpdatePage();
                     else if (update.updateType == "component update") {
-                        var component = update.component;
+                        var component = update;
                         _this.UpdateComponent(component);
                     }
                 });
