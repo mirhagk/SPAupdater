@@ -73,6 +73,8 @@ var Updater = (function () {
     Updater.prototype.UpdatePage = function () {
         this.pendingFullPageUpdate = true;
         this.pendingUpdates++;
+        if (this.updatePageNotification)
+            this.updatePageNotification(this.pendingUpdates);
         console.log('There are ' + this.pendingUpdates + ' updates pending. Refresh the page to get latest');
     };
     Updater.prototype.UpdateComponent = function (component) {
