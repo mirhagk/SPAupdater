@@ -1,7 +1,9 @@
 <html>
     <head>
         <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>DriveThruSPA</title>
+
         <link rel="stylesheet" href="css/normalize.css">
         <link rel="stylesheet" hrsef="css/style.css">
         <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
@@ -17,6 +19,29 @@
             {{~}}
             </ul>
         </script>
+
+        <script type="text/x-template" id="contentPanelTemplate">
+            <table>
+                <thead id="header">
+                    <tr>
+                        <td class="colA">From</td>
+                        <td class="colB">Subject</td>
+                        <td class="colC">Date</td>
+                    </tr>
+                </thead>
+            </table>
+            <table>
+                <tbody id="mailList">
+                </tbody>
+            </table>
+      
+            <table>
+                <tbody id="content">
+
+                </tbody>
+            </table>
+        </script>
+
         <script type="text/x-template" id="mailListTemplate">
             {{~it.emails:value:index}}
                 <tr>
@@ -39,26 +64,7 @@
 
         </div>
         <div id="contentPanel">
-            <table>
-                <tbody id="header">
-                    <tr>
-                        <td class="colA">From</td>
-                        <td class="colB">Subject</td>
-                        <td class="colC">Date</td>
-                    </tr>
-                </tbody>
-            </table>
-            <table>
-                <tbody id="mailList">
-                </tbody>
-            </table>
-        </div>
-        <div>
-            <table>
-                <tbody id="content">
-
-                </tbody>
-            </table>
+            
         </div>
     </body>
 </html>
