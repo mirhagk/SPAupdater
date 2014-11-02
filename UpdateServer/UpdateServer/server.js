@@ -115,9 +115,9 @@ loadCommit('00000');
 
 function extensionToType(extension) {
     switch (extension) {
-        case "js":
+        case ".js":
             return "javascript";
-        case "html":
+        case ".html":
             return "html";
         default:
             return "unknown";
