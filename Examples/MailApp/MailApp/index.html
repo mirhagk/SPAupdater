@@ -29,7 +29,7 @@
 
         <script type="text/template" id="notificationBoxTemplate">
             <span style="position:absolute;bottom:0px;border-color:black;background-color:lightyellow;">
-                You have {{=it.numberOfUpdates}} pending notifications, please refresh to get the latest
+                <a href="javascript:location.reload();">There are {{=it.numberOfUpdates}} new versions of this application, please refresh or click here to get the latest</a>
             </span>
         </script>
 
