@@ -38,7 +38,7 @@
             <ul>
             {{~it.inboxes:value:index}}
                 <li>
-                    <a href="#" id="{{=value}}" onclick="Messages({{=value}})"><p class="mailbox">{{=value}}</p></a>
+                    <a href="#" id="{{=value}}" onclick="Messages({{=value}})"><p class="mailbox">&gt;{{=value}}</p></a>
                 </li>
             {{~}}
             </ul>
@@ -68,8 +68,7 @@
 
         <script type="text/x-template" id="mailListTemplate">
             {{~it.emails:value:index}}
-                <tr {{? index%2 == 0}} style="background-color:#eeeeee"{{?}}>
-                <!--<tr>-->
+                <tr>
                     <td class="colA"><a href="#">{{=value.from}}</a></td>
                     <td class="colB"><a href="#">{{=value.subject}}</a> - <a href="#" id="exerpt">{{=value.message}}</a></td>
                     <td class="colC"><a href="#">{{=value.date}}</a></td>
