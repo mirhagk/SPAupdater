@@ -70,7 +70,7 @@ http.createServer(function (req, res) {
                 var commitUrl = commit.url.replace('github', 'raw.githubusercontent').replace('commit/', '') + '/';
                 var previousCommitUrl = commitUrl;
                 if (commit.added.length > 0)
-                    currentUpdates.push({ updateType: 'page update' });
+                    currentUpdates.push({ updateType: 'page update', debug: 'Added file' });
                 commit.modified.forEach(function (file) {
                     if (file.toLowerCase().startsWith(config.srcRoutePath.toLowerCase())) {
                         download(commitUrl + file, 'temp/' + file, function () {
@@ -118,7 +118,7 @@ function extensionToType(extension) {
         case "js":
             return "javascript";
         case "html":
-            return "view";
+            return "html";
         default:
             return "unknown";
     }
@@ -192,7 +192,7 @@ function detectDifferences(oldFile, newFile, type) {
         fs.readFile(oldFile, 'utf8', function (err, oldData) {
             fs.readFile(newFile, 'utf8', function (err2, newData) {
                 if (err || err2) {
-                    currentUpdates.push({ updateType: "page update" });
+                    currentUpdates.push({ updateType: "page update", debug: err || err2 });
                 } else {
                     var difference = jsdiff.diffLines(oldData, newData);
                     try  {
@@ -212,7 +212,7 @@ function detectDifferences(oldFile, newFile, type) {
                             stageUpdate(f, code);
                         });
                     } catch (ex) {
-                        currentUpdates.push({ updateType: 'page update' });
+                        currentUpdates.push({ updateType: 'page update', debug: ex });
                     }
                 }
             });
@@ -221,7 +221,7 @@ function detectDifferences(oldFile, newFile, type) {
         fs.readFile(oldFile, 'utf8', function (err, oldData) {
             fs.readFile(newFile, 'utf8', function (err2, newData) {
                 if (err || err2) {
-                    currentUpdates.push({ updateType: "page update" });
+                    currentUpdates.push({ updateType: "page update", debug: err || err2 });
                 } else {
                     var oldDom = dom(oldData);
                     var newDom = dom(newData);
@@ -245,7 +245,7 @@ function detectDifferences(oldFile, newFile, type) {
             });
         });
     } else {
-        currentUpdates.push({ updateType: "page update" });
+        currentUpdates.push({ updateType: "page update", debug: 'Unknown type ' + type });
     }
 }
 
