@@ -4,6 +4,7 @@ function Start() {
     updater = new Updater();
 }
 function RefreshTemplates() {
+    ApplyTemplate('contentPanel');
     ApplyTemplate('navMenu', data);
     // ApplyTemplate('header', headers);
     ApplyTemplate('mailList', inboxValues);
