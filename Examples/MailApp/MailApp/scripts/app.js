@@ -4,6 +4,7 @@ function Start() {
     updater = new Updater();
 }
 function RefreshTemplates() {
+    ApplyTemplate('about');
     ApplyTemplate('contentPanel');
     ApplyTemplate('navMenu', data);
     // ApplyTemplate('header', headers);

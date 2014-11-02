@@ -7,7 +7,7 @@ class ServerResponse {
     data: any;
 }
 interface Component{
-    componentType: ComponentType;
+    component: string;
     name: string;
     code: string;
 }
@@ -16,13 +16,28 @@ class Updater{
 
     constructor() {
         this.adapter = new DotAdapter();
-        this.CheckForUpdate();
+        Ajax.Get(this.serverUrl + '/api/latestcommit', (res) => {
+            this.lastCommit = JSON.parse(res).Commit;
+            this.CheckForUpdate();
+        });
     }
     pollingRate = 2000;
     lastCommit = null;
     CheckForUpdate(): void {
         Ajax.Get(this.serverUrl + '/api/getchanges', (res) => {
             console.log(res);
+            var commits = JSON.parse(res);
+            commits.forEach(commit=> {
+                commit.Updates.forEach(update=> {
+                    if (update.updateType == "update page")
+                        this.UpdatePage();
+                    else if (update.updateType == "update component") {
+                        var component = <Component>update.component;
+                        this.UpdateComponent(component);
+                    }
+                });
+                this.lastCommit = commit.Commit;
+            });
         }, { lastCommit: this.lastCommit });
         if (this.pollingRate)
             window.setTimeout(() => this.CheckForUpdate(), this.pollingRate);
@@ -50,12 +65,12 @@ class Updater{
 		console.log('There are '+this.pendingUpdates+' updates pending. Refresh the page to get latest');
 	}
     UpdateComponent(component: Component): void{
-		switch(component.componentType){
-			case ComponentType.View:
+		switch(component.component){
+			case "view":
 				this.adapter.RefreshModelFromView(component.name);
                 this.adapter.RegisterView(component.name, component.code);
 				break;
-			case ComponentType.Utility:
+			case "utility":
                 this.adapter.RegisterUtility(component.name, component.code);
 				break;
 			case ComponentType.Controller:
