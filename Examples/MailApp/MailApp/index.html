@@ -34,10 +34,10 @@
         </script>
 
         <script type="text/x-template" id="navMenuTemplate">
-            <ul>
+            <ul style="border:2px solid red;">
             {{~it.inboxes:value:index}}
-                <li>
-                    <a href="#" id="{{=value}}" onclick="Messages({{=value}})"><p class="mailbox">&gt;{{=value}}</p></a>
+                <li> 
+                    <a href="#" id="{{=value}}" onclick="Messages({{=value}})"><p style="font-weight:bold;" class="mailbox">&gt;&gt;{{=value}} </p></a>
                 </li>
             {{~}}
             </ul>
@@ -66,12 +66,12 @@
         </script>
 		
         <script type="text/x-template" id="mailListTemplate">
-            {{~it.emails:value:index}}
-                <tr>
-                    <td class="colA"><a href="#">{{=value.from}}</a></td>
-                    <td class="colB"><a href="#">{{=value.subject}}</a> - <a href="#" id="exerpt">{{=value.message}}</a></td>
-                    <td class="colC"><a href="#">{{=value.date}}</a></td>
-                </tr>
+            {{~it.emails:value:index}} 
+            <tr>
+                <td style="background-color:white;" class="colA" ><a href="#">{{=value.from}}</a></td>
+                <td class="colB"><a href="#">{{=value.subject}}</a> - <a href="#" id="exerpt">{{=value.message}}</a></td>
+                <td class="colC"><a href="#">{{=value.date}}</a></td>
+            </tr>
             {{~}}
         </script>
         <script type="text/javascript" src="scripts/lib/doT.js"></script>
