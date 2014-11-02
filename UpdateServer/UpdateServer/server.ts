@@ -66,13 +66,19 @@ http.createServer(function (req, res) {
         });
         req.on('end', function () {
             var data = JSON.parse(body);
+            rl.write('\nLoading new commit');
             loadCommit(data.head_commit.id);
+            rl.write('\nLoading ' + data.commits.length + ' commits');
             data.commits.forEach((commit) => {
+                rl.write('\nLoading commit');
                 var commitUrl = commit.url.replace('github', 'raw.githubusercontent').replace('commit/', '') + '/';
                 var previousCommitUrl = commitUrl;
-                if (commit.added.length > 0)
-                    currentUpdates.push({ updateType: 'page update', debug:'Added file' });
+                if (commit.added.length > 0) {
+                    rl.write('\nAdded files');
+                    currentUpdates.push({ updateType: 'page update', debug: 'Added file' });
+                }
                 commit.modified.forEach((file) => {
+                    rl.write('\nModified file');
                     if (file.toLowerCase().startsWith(config.srcRoutePath.toLowerCase())) {
                         download(commitUrl + file, 'temp/' + file, () => {
                             download(previousCommitUrl, 'temp/' + file + '.old', () => {
