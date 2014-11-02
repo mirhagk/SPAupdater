@@ -28,15 +28,21 @@ class Updater{
             console.log(res);
             var commits = JSON.parse(res);
             commits.forEach(commit=> {
-                commit.Updates.forEach(update=> {
-                    if (update.updateType == "page update")
-                        this.UpdatePage();
-                    else if (update.updateType == "component update") {
-                        var component = <Component>update;
-                        this.UpdateComponent(component);
-                    }
-                });
-                this.lastCommit = commit.Commit;
+                try {
+                    commit.Updates.forEach(update=> {
+                        if (update.updateType == "page update")
+                            this.UpdatePage();
+                        else if (update.updateType == "component update") {
+                            var component = <Component>update;
+                            this.UpdateComponent(component);
+                        }
+                    });
+                    this.lastCommit = commit.Commit;
+                }
+                catch (ex) {
+                    this.lastCommit = commit.Commit;
+                    this.UpdatePage();
+                }
             });
         }, { lastCommit: this.lastCommit });
         if (this.pollingRate)
