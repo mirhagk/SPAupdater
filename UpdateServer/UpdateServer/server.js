@@ -72,11 +72,15 @@ http.createServer(function (req, res) {
                 if (commit.added.length > 0)
                     currentUpdates.push({ updateType: 'page update' });
                 commit.modified.forEach(function (file) {
-                    download(commitUrl + file, 'temp/' + file, function () {
-                        download(previousCommitUrl, 'temp/' + file + '.old', function () {
-                            rl.write('downloaded ' + file);
+                    if (file.toLowerCase().startsWith(config.srcRoutePath.toLowerCase())) {
+                        download(commitUrl + file, 'temp/' + file, function () {
+                            download(previousCommitUrl, 'temp/' + file + '.old', function () {
+                                var type = extensionToType(path.extname(file));
+                                detectDifferences('temp/' + file + '.old', 'temp/' + file, type);
+                                rl.write('downloaded ' + file);
+                            });
                         });
-                    });
+                    }
                 });
             });
             // use POST
@@ -109,6 +113,16 @@ var rl = readline.createInterface({
 });
 loadCommit('00000');
 
+function extensionToType(extension) {
+    switch (extension) {
+        case "js":
+            return "javascript";
+        case "html":
+            return "view";
+        default:
+            return "unknown";
+    }
+}
 function findAllFunctions(parseTree, parent) {
     if (parseTree == null)
         return [];

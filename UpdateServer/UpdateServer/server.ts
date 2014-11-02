@@ -27,7 +27,6 @@ var config = {
     
 };
 
-
 var port = 1337
 http.createServer(function (req, res) {
     res.setHeader('Access-Control-Allow-Credentials', 'true');
@@ -75,11 +74,15 @@ http.createServer(function (req, res) {
                 if (commit.added.length > 0)
                     currentUpdates.push({ updateType: 'page update' });
                 commit.modified.forEach((file) => {
-                    download(commitUrl + file, 'temp/' + file, () => {
-                        download(previousCommitUrl, 'temp/' + file + '.old', () => {
-                            rl.write('downloaded ' + file);
+                    if (file.toLowerCase().startsWith(config.srcRoutePath.toLowerCase())) {
+                        download(commitUrl + file, 'temp/' + file, () => {
+                            download(previousCommitUrl, 'temp/' + file + '.old', () => {
+                                var type = extensionToType(path.extname(file));
+                                detectDifferences('temp/' + file + '.old', 'temp/' + file, type);
+                                rl.write('downloaded ' + file);
+                            });
                         });
-                    });
+                    }
                 });
             });
             // use POST
@@ -115,6 +118,16 @@ var rl = readline.createInterface({
 loadCommit('00000');
 
 
+function extensionToType(extension) {
+    switch (extension) {
+        case "js":
+            return "javascript";
+        case "html":
+            return "view";
+        default:
+            return "unknown";
+    }
+}
 function findAllFunctions(parseTree, parent) {
     if (parseTree == null) return [];
     parseTree.parent = parent;
