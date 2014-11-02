@@ -23,7 +23,7 @@
                 
                 The server listens to a git repo for a push. Once a push is discovered, it downloads the old and new copies of the file. Then it pulls components from the file (templates, functions etc) and detects components that have been modified. It then notifies the user's web application that there is a new component, and sends it to the client. The client downloads this updated component from the server, and updates the component locally. For most components the client can update behind the scenes without the user ever noticing.
 
-                  For updates that can't be updated seamlessly, the application tracks them and provides a hook so that you can notify the user a new version is available.
+                  For updates that can't be updated seamlessly, the application tracks them and provides a hook so that you can notify the user a new version is available. As the framework grows, more will be able to be updated seemlessly, but it will always fail gracefully.
             </p>
         </script>
 
