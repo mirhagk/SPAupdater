@@ -87,6 +87,9 @@ http.createServer(function (req, res) {
         });
         res.writeHead(200, { 'Content-Type': 'text/plain' });
         res.end('Received, thanks github :) BTW can I have a job?');
+    } else if (path == '/api/latestcommit') {
+        res.writeHead(200, { 'Content-Type': 'text/plain' });
+        res.end(JSON.stringify({ Commit: updateHistory[updateHistory.length - 1].Commit }));
     } else {
         res.writeHead(404, { 'Content-Type': 'text/plain' });
         res.end("The resource you're looking for is unavailable");
