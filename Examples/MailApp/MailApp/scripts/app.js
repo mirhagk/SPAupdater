@@ -1,6 +1,7 @@
 ﻿var updater;
 function Start() {
     RefreshTemplates();
+    Messages({ text: 'Inbox' });
     updater = new Updater();
     updater.updatePageNotification = function (numberOfUpdates) {
         ApplyTemplate('notificationBox', { numberOfUpdates: numberOfUpdates });
@@ -12,7 +13,8 @@ function RefreshTemplates() {
     ApplyTemplate('navMenu', data);
     // ApplyTemplate('header', headers);
     ApplyTemplate('mailList', inboxValues);
-    SetFocus('Inbox');
+    Messages();
+    //SetFocus('Inbox');
 }
 
 //function ShowContent() {
@@ -21,14 +23,15 @@ function RefreshTemplates() {
 //    ApplyTemplate('mailList', inboxValues);
 //    SetFocus
 //}
-
+var mailbox;
 function Messages(id) {
+    mailbox = id && id.text || mailbox;
     var template = document.getElementById('mailListTemplate');
     var target = document.getElementById('mailList');
-    if (id.text == 'Inbox') {
+    if (mailbox == 'Inbox') {
         target.innerHTML = doT.template(template.innerHTML)(inboxValues);
         SetFocus('Inbox');
-    } else if (id.text == 'Spam') {
+    } else if (mailbox == 'Spam') {
         target.innerHTML = doT.template(template.innerHTML)(spamValues);
         SetFocus('Spam');
     } else {
