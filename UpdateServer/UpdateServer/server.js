@@ -280,7 +280,7 @@ function commandResponse(command) {
             currentUpdates.map(function (x) {
                 return x.updateType + ":" + x.name;
             }).forEach(function (x) {
-                rl.write(x);
+                rl.write('\n' + x);
             });
             break;
         default:

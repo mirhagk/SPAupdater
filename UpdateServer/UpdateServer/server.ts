@@ -287,7 +287,7 @@ function commandResponse(command) {
         case "outputChangesShort":
             rl.write('Changes:');
             currentUpdates.map((x) => x.updateType + ":" + x.name).forEach(x=> {
-                rl.write(x);
+                rl.write('\n'+x);
             });
             break;
         default:
