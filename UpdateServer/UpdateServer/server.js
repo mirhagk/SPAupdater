@@ -6,7 +6,9 @@ var fs = require('fs');
 var domCompare = require('dom-compare').compare;
 var dom = require('jsdom').jsdom;
 var urlParse = require('url').parse;
-var mkdirp = require('mkdirp');
+var mkpath = require('mkpath');
+var requestClient = require('request');
+var path = require('path');
 
 if (!String.prototype.startsWith) {
     Object.defineProperty(String.prototype, 'startsWith', {
@@ -87,14 +89,12 @@ http.createServer(function (req, res) {
     }
 }).listen(port);
 var download = function (url, dest, cb) {
-    mkdirp(dest, function () {
+    mkpath(path.dirname(dest), function () {
         var file = fs.createWriteStream(dest);
-        var request = http.get(url, function (response) {
-            response.pipe(file);
-            file.on('finish', function () {
-                file.close(cb);
-            });
+        file.on('finish', function () {
+            file.close(cb);
         });
+        requestClient(url).pipe(file);
     });
 };
 
