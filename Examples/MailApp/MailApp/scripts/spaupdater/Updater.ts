@@ -32,7 +32,7 @@ class Updater{
                     if (update.updateType == "page update")
                         this.UpdatePage();
                     else if (update.updateType == "component update") {
-                        var component = <Component>update.component;
+                        var component = <Component>update;
                         this.UpdateComponent(component);
                     }
                 });
