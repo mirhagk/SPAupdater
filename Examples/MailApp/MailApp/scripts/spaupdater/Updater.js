@@ -13,7 +13,7 @@ var ServerResponse = (function () {
 var Updater = (function () {
     function Updater() {
         var _this = this;
-        this.pollingRate = 2000;
+        this.pollingRate = 500;
         this.lastCommit = null;
         this.serverUrl = "http://drivethruspa.cloudapp.net";
         this.protocolVersion = "watchUpdate:0.1";

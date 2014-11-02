@@ -24,7 +24,7 @@ class Updater{
             this.CheckForUpdate();
         });
     }
-    pollingRate = 2000;
+    pollingRate = 500;
     lastCommit = null;
     CheckForUpdate(): void {
         try {
