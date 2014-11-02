@@ -32,9 +32,9 @@ var Updater = (function () {
             var commits = JSON.parse(res);
             commits.forEach(function (commit) {
                 commit.Updates.forEach(function (update) {
-                    if (update.updateType == "update page")
+                    if (update.updateType == "page update")
                         _this.UpdatePage();
-                    else if (update.updateType == "update component") {
+                    else if (update.updateType == "component update") {
                         var component = update.component;
                         _this.UpdateComponent(component);
                     }
@@ -51,7 +51,7 @@ var Updater = (function () {
     Updater.prototype.RegisterWebSocket = function () {
         var _this = this;
         this.socket = new io(this.serverUrl);
-        this.socket.on('update component', function (event) {
+        this.socket.on('component update', function (event) {
             if (_this.pendingFullPageUpdate)
                 _this.UpdatePage();
             else

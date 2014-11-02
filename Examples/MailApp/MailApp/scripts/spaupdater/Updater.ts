@@ -29,9 +29,9 @@ class Updater{
             var commits = JSON.parse(res);
             commits.forEach(commit=> {
                 commit.Updates.forEach(update=> {
-                    if (update.updateType == "update page")
+                    if (update.updateType == "page update")
                         this.UpdatePage();
-                    else if (update.updateType == "update component") {
+                    else if (update.updateType == "component update") {
                         var component = <Component>update.component;
                         this.UpdateComponent(component);
                     }
@@ -47,7 +47,7 @@ class Updater{
 	protocolVersion = "watchUpdate:0.1";
     RegisterWebSocket(): void{
         this.socket = new io(this.serverUrl);
-        this.socket.on('update component', (event) => {
+        this.socket.on('component update', (event) => {
             if (this.pendingFullPageUpdate)
                 this.UpdatePage();
             else
