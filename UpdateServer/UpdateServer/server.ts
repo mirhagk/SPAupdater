@@ -266,7 +266,17 @@ function detectDifferences(oldFile, newFile, type) {
         currentUpdates.push({ updateType: "page update", debug: 'Unknown type '+type });
     }
 }
-
+var guid = (function () {
+    function s4() {
+        return Math.floor((1 + Math.random()) * 0x10000)
+            .toString(16)
+            .substring(1);
+    }
+    return function () {
+        return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+            s4() + '-' + s4() + s4() + s4();
+    };
+})();
 
 function commandResponse(command) {
     switch (command) {
@@ -275,6 +285,7 @@ function commandResponse(command) {
             process.exit();
             return;
         case "forceRefresh":
+            loadCommit(guid());
             currentUpdates.push({ updateType: "page update", debug: 'Forced Refresh'});
             break;
         case "push":
