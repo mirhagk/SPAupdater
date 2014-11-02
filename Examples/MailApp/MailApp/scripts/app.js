@@ -1,11 +1,11 @@
 ﻿var updater;
 function Start() {
     RefreshTemplates();
+    Messages({ text: 'Inbox' });
     updater = new Updater();
     updater.updatePageNotification = function (numberOfUpdates) {
         ApplyTemplate('notificationBox', { numberOfUpdates: numberOfUpdates });
     }
-    SetFocus('Inbox');
 }
 function RefreshTemplates() {
     //ApplyTemplate('about');
