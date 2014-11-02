@@ -106,7 +106,8 @@ http.createServer(function (req, res) {
         res.end("The resource you're looking for is unavailable");
     }
 }).listen(port, null, null, (err) => {
-    rl.write('Error listening ' + JSON.stringify(err));
+    if (err)
+        rl.write('Error listening ' + JSON.stringify(err));
 });
 var download = function (url, dest, cb) {
     mkpath(pathLib.dirname(dest), () => {
