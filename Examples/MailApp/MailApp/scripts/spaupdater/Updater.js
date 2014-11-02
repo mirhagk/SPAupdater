@@ -27,30 +27,33 @@ var Updater = (function () {
     }
     Updater.prototype.CheckForUpdate = function () {
         var _this = this;
-        Ajax.Get(this.serverUrl + '/api/getchanges', function (res) {
-            console.log(res);
-            var commits = JSON.parse(res);
-            commits.forEach(function (commit) {
-                try  {
-                    commit.Updates.forEach(function (update) {
-                        if (update.updateType == "page update")
-                            _this.UpdatePage();
-                        else if (update.updateType == "component update") {
-                            var component = update;
-                            _this.UpdateComponent(component);
-                        }
-                    });
-                    _this.lastCommit = commit.Commit;
-                } catch (ex) {
-                    _this.lastCommit = commit.Commit;
-                    _this.UpdatePage();
-                }
-            });
-        }, { lastCommit: this.lastCommit });
-        if (this.pollingRate)
-            window.setTimeout(function () {
-                return _this.CheckForUpdate();
-            }, this.pollingRate);
+        try  {
+            Ajax.Get(this.serverUrl + '/api/getchanges', function (res) {
+                console.log(res);
+                var commits = JSON.parse(res);
+                commits.forEach(function (commit) {
+                    try  {
+                        commit.Updates.forEach(function (update) {
+                            if (update.updateType == "page update")
+                                _this.UpdatePage();
+                            else if (update.updateType == "component update") {
+                                var component = update;
+                                _this.UpdateComponent(component);
+                            }
+                        });
+                        _this.lastCommit = commit.Commit;
+                    } catch (ex) {
+                        _this.lastCommit = commit.Commit;
+                        _this.UpdatePage();
+                    }
+                });
+            }, { lastCommit: this.lastCommit });
+        } finally {
+            if (this.pollingRate)
+                window.setTimeout(function () {
+                    return _this.CheckForUpdate();
+                }, this.pollingRate);
+        }
     };
 
     Updater.prototype.RegisterWebSocket = function () {
