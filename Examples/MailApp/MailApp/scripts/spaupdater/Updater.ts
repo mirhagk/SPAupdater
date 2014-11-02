@@ -56,7 +56,7 @@ class Updater{
         }
     }
 	socket;
-    serverUrl = "http://drivethruspa.cloudapp.net:1337";
+    serverUrl = "http://drivethruspa.cloudapp.net";
 	protocolVersion = "watchUpdate:0.1";
     RegisterWebSocket(): void{
         this.socket = new io(this.serverUrl);
