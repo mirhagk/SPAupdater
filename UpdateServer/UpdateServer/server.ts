@@ -274,6 +274,9 @@ function commandResponse(command) {
             rl.close();
             process.exit();
             return;
+        case "forceRefresh":
+            currentUpdates.push({ updateType: "page update", debug: 'Forced Refresh'});
+            break;
         case "push":
             sockets.forEach((s) => { rl.write('sending to client A'); });
             break;
