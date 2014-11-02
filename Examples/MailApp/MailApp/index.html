@@ -6,8 +6,8 @@
 
         <link rel="stylesheet" href="css/normalize.css">
         <link rel="stylesheet" href="css/style.css">
-        <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+        <!-- <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet"> -->
+        <!-- <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css"> -->
 
         <script type="text/template" id="aboutTemplate">
             <br/><p style="background-color:white;">
@@ -17,7 +17,7 @@
 
                 ##Interaction with existing SPAs##
 
-                It would be silly to introduce yet another SPA framework, so rather than even trying to update data, Drive-Thru SPA just extends existing SPA frameworks. There are (or rather will be) adapters for different frameworks, so just select the adapter for your framework and don't worry about doing anything else except reading the complimentary emails sent from your satisfied users.
+                It would be silly to introduce yet another SPA framework, so rather than even trying to update data, Drive-Thru SPA just extends existing SPA frameworks. There are (or rather will be) adapters for different frameworks, so just select the adapter for your framework and don&#39;t worry about doing anything else except reading the complimentary emails sent from your satisfied users.
 
                 ##How it works##
                 
@@ -69,7 +69,7 @@
             {{~it.emails:value:index}}
                 <tr>
                     <td class="colA"><a href="#">{{=value.from}}</a></td>
-                    <td class="colB"><a href="#">{{=value.subject}}</a></td>
+                    <td class="colB"><a href="#">{{=value.subject}}</a> - <a href="#" id="exerpt">{{=value.message}}</a></td>
                     <td class="colC"><a href="#">{{=value.date}}</a></td>
                 </tr>
             {{~}}
@@ -80,7 +80,6 @@
         <script type="text/javascript" src="scripts/spaupdater/DotAdapter.js"></script>
         <script type="text/javascript" src="scripts/spaupdater/Updater.js"></script>
         <script type="text/javascript" src="scripts/app.js"></script>
-        <link rel='stylesheet' href='css/style.css' type="text/css" charset="utf-8"/>
     </head>
     <body onload="Start()">
         <div id="navMenu">

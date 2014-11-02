@@ -2,6 +2,7 @@
 body { 
     background-color: #FFF;
     width: 100%;
+    position: relative;
 }
 a { text-decoration: none; color: #000; }
 a:hover { background-color: #F3F3F3; }
@@ -9,48 +10,35 @@ p, td { font-family: Helvetica, Arial, Sans-Serif; font-size: 12pt; }
 li { list-style: none; }
 #navMenu {
     background-color: #F3F3F3;
-    width: 20%;
+    width: 15%;
+    height: 100%;
     float: left;
 }
 #navMenu p { padding: 3% 0 3% 40%; }
 #navMenu p:hover, #mailList tr:hover { background-color: #F9F9F9!important; }
 #contentPanel {
-    width: 80%;
+    width: 85%;
     float: right;
 }
 #header { background-color: #F3F3F3; text-decoration: none; border: none; text-align: left; font-family: Helvetica, Arial, Sans-Serif; font-size: 14pt; }
-table { width: 100%; border-collapse: collapse; }
-
-table tbody {
-display: block;
+table { 
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
 }
-table body {
-	overflow: auto;
-	height: 200px;
+/*#mailList {
+    display: block;
+    max-height: 125px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}*/
+#exerpt { color: #5C5C5C; }
+/*tr { width: 100%; }*/
+td { /*display: block; width: 100%;*/ 
+    padding: 7px 0 6px 7px; 
+    overflow: hidden; 
+    white-space: nowrap;
 }
-/* th {
-width: 72px;
-} */
-
-#mailList {
-	min-height: 120px;
-	max-height: 120px;
-	top: 10px;
-    right: 10px;
-    bottom: 10px;
-    left: 10px;
-    overflow: auto;
-}
-}
-td { padding: 1px; }
-.colA, th.colA {
-    width: 20%;
-}
-
-.colB, th.colB {
-    width: 60%;
-}
-
-.colC, th.colC {
-    width: 20%;
-}
+.colA, th.colA { width: 17%; }
+.colB, th.colB { width: 67%; }
+.colC, th.colC { width: 15%; }
