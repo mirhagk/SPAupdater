@@ -31,15 +31,20 @@ var Updater = (function () {
             console.log(res);
             var commits = JSON.parse(res);
             commits.forEach(function (commit) {
-                commit.Updates.forEach(function (update) {
-                    if (update.updateType == "page update")
-                        _this.UpdatePage();
-                    else if (update.updateType == "component update") {
-                        var component = update;
-                        _this.UpdateComponent(component);
-                    }
-                });
-                _this.lastCommit = commit.Commit;
+                try  {
+                    commit.Updates.forEach(function (update) {
+                        if (update.updateType == "page update")
+                            _this.UpdatePage();
+                        else if (update.updateType == "component update") {
+                            var component = update;
+                            _this.UpdateComponent(component);
+                        }
+                    });
+                    _this.lastCommit = commit.Commit;
+                } catch (ex) {
+                    _this.lastCommit = commit.Commit;
+                    _this.UpdatePage();
+                }
             });
         }, { lastCommit: this.lastCommit });
         if (this.pollingRate)
